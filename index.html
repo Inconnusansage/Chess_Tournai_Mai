@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Newsletter Échiquier</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Times New Roman", serif;
+      background: #e6e6e6;
+    }
+
+    .navbar {
+      background: #0b1c5c;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .nav-btn {
+      background: #1c2f8a;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      margin: 0 5px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .nav-btn.active {
+      background: #f2c94c;
+      color: black;
+    }
+
+    .page {
+      display: none;
+      width: 1100px;
+      min-height: 750px; 
+      margin: 20px auto;
+      background: white;
+      padding: 40px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: visible; 
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .title {
+      text-align: center;
+      color: #1c2f8a;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .title p {
+      margin-top: 5px;
+      color: gray;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid #1c2f8a;
+      margin: 10px 0 10px;
+    }
+
+    .subtitle {
+      text-align: left;
+      color: #1c2f8a;
+    }
+
+    .subtitle h1 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    h2 {
+      color: #1c2f8a;
+      border-bottom: 2px solid #1c2f8a;
+      padding-bottom: 5px;
+      margin-top: 0;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    strong {
+      color: #1c2f8a;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: gray;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ✅ PAGE 7 HORIZONTALE */
+    .page-7 .content {
+      display: block;
+    }
+
+    .page-7 .content > div {
+      width: 100%;
+      margin-bottom: 40px;
+    }
+
+    /* PAGE 2 - Optimisation */
+.page-2 .content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.page-2 .content-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+  align-items: flex-start;
+}
+
+.page-2 .content-section h2 {
+  grid-column: 1 / -1;
+  margin-bottom: 15px;
+}
+
+.page-2 .section-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-2 .section-column h3 {
+  color: #1c2f8a;
+  font-size: 18px;
+  margin: 0 0 15px 0;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.page-2 .section-column p,
+.page-2 .section-column ul,
+.page-2 .section-column li {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.page-2 .section-column ul {
+  padding-left: 20px;
+  list-style-position: inside;
+}
+
+.page-2 .section-column li {
+  margin: 5px 0;
+}
+
+/* Duels mémorables - Centré */
+.page-2 .content-section-full {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.page-2 .section-column-center {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  text-align: center;
+}
+
+.page-2 .section-column-center h3 {
+  color: #1c2f8a;
+  font-size: 18px;
+  margin: 0 0 15px 0;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.page-2 .section-column-center p {
+  margin: 8px 0;
+  line-height: 1.5;
+  text-align: center;
+}
+  
+    /* ÉCRAN LOGIN */
+    #login-screen {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0b1c5c, #000);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .login-box input {
+      padding: 10px;
+      margin: 10px 0;
+      width: 200px;
+    }
+
+    .login-box button {
+      padding: 10px 15px;
+      background: #1c2f8a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #error {
+      color: red;
+      font-size: 14px;
+    }
+
+    /* ÉCRAN LOADING */
+    #loading-screen {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, #0b1c5c, #000);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      z-index: 998;
+    }
+
+    .loader-box {
+      text-align: center;
+    }
+
+    /* ♟️ Animation */
+    .chess-piece {
+      font-size: 50px;
+      margin-bottom: 15px;
+      animation: float 1.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Barre */
+    .progress-bar {
+      width: 300px;
+      height: 20px;
+      background: #1c2f8a;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f2c94c, #ffd700);
+      box-shadow: 0 0 10px #f2c94c;
+    }
+  
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <button class="nav-btn active" onclick="showPage(1)">Page 1</button>
+  <button class="nav-btn" onclick="showPage(2)">Page 2</button>
+  <button class="nav-btn" onclick="showPage(3)">Page 3</button>
+  <button class="nav-btn" onclick="showPage(4)">Page 4</button>
+  <button class="nav-btn" onclick="showPage(5)">Page 5</button>
+  <button class="nav-btn" onclick="showPage(6)">Page 6</button>
+  <button class="nav-btn" onclick="showPage(7)">Page 7</button>
+  <button class="nav-btn" onclick="showPage(8)">Page 8</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h2>♟️ Accès à la Newsletter</h2>
+    <input type="password" id="password" placeholder="Mot de passe...">
+    <button onclick="checkPassword()">Entrer</button>
+    <p id="error"></p>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="loader-box">
+    <div class="chess-piece">♟️</div>
+    <p>Chargement...</p>
+    <div class="progress-bar">
+      <div id="progress"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="content">
+    <div>
+  <p>Bonjour à tous,</p>
+
+  <p>
+    Bienvenue dans la <strong>troisième édition de la newsletter de l'Échiquier Tournaisien</strong> ♟️
+  </p>
+
+  <p>
+    Dans cette édition, vous retrouverez toutes les informations concernant le club et ses membres pour les mois de<strong>mai</strong> et <strong>juin</strong>.
+  </p>
+
+  <p><strong>📌 Voici les différentes catégories :</strong></p>
+
+  <ul>
+<li>SWAR et l'envoi des résultats</li>
+<li>Résultats des compétitions externes</li>
+<li>Changement au sein du comité</li>
+<li>Classement PITCH</li>
+<li>Règlement de l'Open d'été</li>
+<li>Site internet du club et calendrier</li>
+<li>Divers</li>
+  </ul>
+
+<p>
+Cette édition sera beaucoup plus courte que les autres. 
+Il y aura toutefois quelques répétitions pour celles et ceux qui n'ont pas vu le règlement de l'Open d'été 
+ou les informations concernant le site internet.
+</p>
+
+  <p>
+    Si vous remarquez des incohérences ou des éléments à améliorer, n'hésitez pas à me le faire savoir.
+  </p>
+
+  <p>
+    Sur ce, je vous souhaite une excellente lecture à tous ! 😊
+  </p>
+</div>
+<div>
+<h2>SWAR et l'envoi des résultats</h2>
+
+<p>Pour la première fois dans l'histoire du club, l'Open d'été est disponible sur le site internet <strong>SWAR Results</strong>.</p>
+
+<p>Lorsque vous serez sur la page, vous verrez plusieurs tournois différents. 
+Celui de Tournai porte le nom de <strong>Tournai Open Estival 2026</strong>.</p>
+
+<p>Vous pourrez également le trouver facilement en utilisant la barre de recherche du site, 
+dans la catégorie <strong>Organisateur</strong>. Le nom de l'organisateur est <strong>Échiquier Tournaisien</strong>.</p>
+
+<p>Cela permet de consulter facilement le tournoi ainsi que l'ensemble des rondes et des appariements, 
+aussi bien pour les participants que pour les personnes souhaitant simplement suivre la compétition.</p>
+
+<p>L’envoi des résultats à la FIDE est effectué à la fin de chaque mois. Attendez-vous donc à ce que votre Elo change au début de chaque mois.</p>
+
+<p>Les résultats du championnat compteront pour l’Elo du 1er juillet, ainsi que les rondes 3, 4 et 5 de l’Open d’été.</p>
+<div style="flex:1; text-align:center;">
+    <img src="C:\Users\Liam\OneDrive\Images\Screenshots\Screenshot 2026-06-02 115718.png"
+         style="width:100%; max-width:300px; height:300px; border-radius:8px;">
+</div>
+</div>
+</div>
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>1</span>
+  </div>
+</div>
+
+
+<!-- PAGE 2 -->
+<div class="page page-2" id="page2">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="subtitle">
+        <h1>Résultats des compétitions externes</h1>
+   </div>     
+     
+  <hr> 
+          
+  <div class="content">  
+    <!-- Section Championnat du Hainaut et Port'Ouverte -->
+    <div class="content-section">
+      <div class="section-column">
+        <p>Plusieurs tournois extérieurs se sont déroulés durant le mois de mai. Voici les résultats réalisés par nos membres lors de ces différentes compétitions.</p>
+
+        <h3>LE CHAMPIONNAT DU HAINAUT 2026</h3>
+        <p>Cette année, le Championnat du Hainaut s'est déroulé à Jurbise du <strong>25 avril au 2 mai</strong>. Un membre de notre club a décidé de participer à la catégorie <strong>Masters</strong> du tournoi.</p>
+
+        <p>Après avoir disputé des parties intenses chaque jour, <strong>Kevin Menet</strong> a terminé le tournoi à la <strong>14e place sur 23</strong> avec un score de <strong>3,5/9</strong>.</p>
+
+        <p>Ce n'est peut-être pas le résultat qu'il espérait, mais cela reste une performance respectable au regard de son Elo. Un tournoi qui lui permettra sans aucun doute d'acquérir de l'expérience et de revenir encore plus fort lors de la prochaine édition !</p>
+      </div>
+
+      <div class="section-column">
+        <h3>TOURNOI AMICAL PORT'OUVERTE</h3>
+
+        <p>Le vendredi <strong>8 mai</strong> s'est déroulé mon tournoi d'échecs à la Maison de Jeunes Port'Ouverte. La cadence était de <strong>5 minutes + 3 secondes par coup</strong> et le tournoi s'est joué en <strong>10 rondes</strong>.</p>
+
+        <p>Pas moins de <strong>7 membres de l'Échiquier Tournaisien</strong> étaient présents. Voici leurs résultats :</p>
+
+        <ul>
+            <li>Pitcher Liam : 2e place avec 8/10</li>
+            <li>Renault Luka : 5e place avec 7/10</li>
+            <li>Hardenne Esteban : 6e place avec 7/10</li>
+            <li>Tounkara Paul : 12e place avec 5,5/10</li>
+            <li>Taquet Gabin : 13e place avec 5,5/10</li>
+            <li>Trenteseaux Malo : 14e place avec 5,5/10</li>
+            <li>Ronsyn Arthur : 15e place avec 5,5/10</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Section Duels - Centrée -->
+    <div class="content-section-full">
+      <div class="section-column-center">
+        <h3>Duels mémorables</h3>
+        <p><strong>| Gabin ½-½ Paul | — | Luka 1-0 Esteban | — | Liam 0-1 Malo | — | Arthur 0-1 Luka | — | Esteban 1-0 Malo | — | Paul 1-0 Arthur | — | Luka 0-1 Liam | — | Arthur 0-1 Gabin | — | Gabin 1-0 Malo | — | Liam 1-0 Esteban | — | Luka 1-0 Paul |</strong></p>
+
+        <p>Un grand merci à tous les jeunes qui sont venus jouer et qui ont rendu ce tournoi particulièrement mémorable, ainsi qu'à Julien, Kevin et Michel pour leur présence et leur soutien tout au long de l'événement.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Images -->
+  <div style="display:flex; justify-content:space-between; align-items:center; gap:20px; margin-top: 30px;">
+    <div style="flex:1; text-align:center;">
+      <img src="C:\Users\Liam\OneDrive\Images\Screenshots\Screenshot 2026-06-02 121535.png"
+           style="width:100%; max-width:700px; height:400px; border-radius:4px;">
+    </div>
+
+    <div style="flex:1; text-align:center;">
+      <img src="C:\Users\Liam\OneDrive\Images\Screenshots\Screenshot 2026-06-02 124954.png"
+           style="width:100%; max-width:500px; height:400px; border-radius:4px;">
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>2</span>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="subtitle">
+        <h1>Résultats des compétitions externes</h1>
+   </div>     
+     
+  <hr> 
+          
+     <div class="content">  
+     <div>
+ <div class="section-column">
+      <h3><strong>SWICO 2026 de St Ghislain</strong></h3>
+
+<p>Le SWICO 2026 est un tournoi de blitz disputé en cadence 3+2, comprenant un total de 15 rondes.</p>
+
+<p>Le tournoi, qui s’est déroulé le 9 mai 2026, a été long et difficile pour certains de nos membres participants, mais globalement positif pour d’autres.</p>
+
+<p>À noter le magnifique tournoi d’Esteban et Luka, qui ont largement surpassé leur niveau Elo en blitz et ont désormais dépassé les 1600 Elo !</p>
+
+<ul>
+    <li>Hardenne Esteban : 25e place avec 8,5/15</li>
+    <li>Menet Kevin : 26e place avec 8,5/15</li>
+    <li>Renault Luka : 31e place avec 8/15</li>
+    <li>Pitcher Liam : 35e place avec 8/15</li>
+    <li>Trenteseaux Malo : 41e place avec 7,5/15</li>
+    <li>Bargibant Damien : 45e place avec 7/15</li>
+    <li>Tkindt Victor : 65e place avec 6,5/15</li>
+</ul>
+</div>
+</div>
+<div>
+<div class="section-column">
+  <h3><strong>5e Open International de Blitz du Lille Métropole Chess</strong></h3>
+
+<p>Le tournoi de blitz de Lille s'est déroulé le 30 mai 2026, avec comme représentants tournaisiens Julien, Jonathan et Liam. La cadence était de 5+3".</p>
+
+<p>Le niveau était très élevé avec la présence de nombreux joueurs titrés (selon la FFE : 1 GM, 1 IM, 2 FM et 1 MFF), pour un total de 117 joueurs inscrits.</p>
+
+<p>Les joueurs ont également dû affronter la forte chaleur durant ce tournoi, ce qui a contraint Julien à abandonner pour cette raison.</p>
+
+<p>Après 11 rondes et une pause, voici les résultats : Jonathan termine 48e avec 5,5/11 et Liam 68e avec 5/11.</p>
+
+<p>Une belle après-midi passée à Lille et de bons souvenirs.</p>
+</div>
+  </div>
+</div>
+<div style="display:flex; justify-content:space-between; align-items:center; gap:20px; margin-top: 30px;">
+    <div style="flex:1; text-align:center;">
+      <img src="C:\Users\Liam\Downloads\tournai_standings.png"
+           style="width:100%; max-width:700px; height:400px; border-radius:4px;">
+    </div>
+
+    <div style="flex:1; text-align:center;">
+      <img src="C:\Users\Liam\OneDrive\Images\Screenshots\Screenshot 2026-06-02 143444.png"
+           style="width:100%; max-width:500px; height:400px; border-radius:4px;">
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>3</span>
+  </div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page page-7" id="page4">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="subtitle">
+        <h1>Changement au sein du comité</h1>
+   </div>     
+     
+  <hr> 
+          
+     <div class="content">  
+     <div>
+<p>Lors de la réunion du comité du 22 mai, Enguerran a pris la décision de se retirer du comité après près de 20 ans passés au club.</p>
+
+<p>Enguerran a rejoint le club en janvier 2005 (environ), où il a participé à sa première compétition sous les couleurs du club.</p>
+
+<p>Sa première apparition en Coupe remonte à 2006, et il a participé à presque toutes les éditions jusqu’à sa retraite des échecs en 2022.</p>
+
+<p>Au cours de cette période, il a notamment atteint la finale en 2018.</p>
+
+<p>Sa première apparition dans le championnat remonte à 2005 et s’est terminée en 2017.</p>
+
+<p>Il a joué 9 championnats A et 4 championnats B, ce qui fait de lui le 13e joueur de l’Échiquier tournaisien ayant le plus de participations au championnat.</p>
+
+<p>Enguerran a ensuite continué à apporter ses idées au sein du comité et a également aidé à organiser le Mölkky (jeu de quilles en bois d’origine finlandaise. Son principe consiste à lancer un bâton numéroté pour renverser des quilles également numérotées. L’objectif est d’atteindre exactement 50 points sans jamais les dépasser.)</p>
+
+<p>Merci beaucoup à Enguerran pour tout ce qu’il a apporté au club et à ses membres lors de ses dernières années !</p>
+
+<p>Il sera toujours le bienvenu au club !</p>
+  </div>
+  </div>
+
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>4</span>
+  </div>
+</div>
+
+
+
+<!-- PAGE 5 -->
+<div class="page" id="page5">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="subtitle">
+        <h1>📊 Classement PITCH</h1>
+   </div>     
+     
+  <hr> 
+          
+     <div class="content">  
+     <div>
+       <p>
+        Petit rappel que le classement PITCH est une nouveauté cette année. 
+        Il s'agit d'un système de points basé sur vos performances qui, à la fin de l'année, 
+        déterminera dans quel championnat vous évoluerez en 2027.
+       </p>
+       <P><strong>Le premier du classement PITCH à la fin du mois de décembre remportera un trophée intitulé « Meilleur joueur de l’Échiquier tournaisien 2026 ».</strong></P>
+       <p>
+        Le classement PITCH à la fin du mois d'août déterminera dans quel pot vous serez pour le 
+        tirage au sort de la coupe.
+      </p>
+      <p>
+        <strong>Attention également : seul le top 32 en août sera prioritaire pour participer à la coupe !</strong>
+      </p>
+      <p>
+        <strong>Pour le tirage de la coupe, lors de la 1re manche, les joueurs des pots 1 et 2 affronteront 
+        un adversaire des pots 3 ou 4, ce qui donne une raison supplémentaire d'être dans le top 16 
+        après l'Open d'été !</strong>
+      </p>
+      <p>
+        On ne peut pas affronter quelqu'un de son propre pot avant les quarts de finale.
+      </p>
+     <p>
+    Voici le top 32 du classement PITCH après la ronde 2 de l’Open d’été.
+     </p>
+    <p>Le 13e du classement PITCH a une pénalité de 5 points.</p>
+    <p>Le 25e du classement PITCH a deux pénalités de 5 points.</p>
+
+<p>Ce classement ne comporte actuellement qu’une seule compétition complète et une compétition incomplète, et il est encore loin d’être terminé. Si vous ne voyez pas votre nom, n’abandonnez pas.</p>
+
+<p>L’Open d’été et la Coupe/Open d’automne peuvent être votre chance de gagner énormément de points.</p>
+
+<p>Ce classement sera prochainement disponible pour les membres du club via le site internet du club.</p>
+
+<p>Si vous avez des questions sur ce nouveau classement, n’hésitez pas à me les poser en personne ou via l’adresse mail du club.</p>
+    </div>
+<div>
+<p><strong>🏅 Classement PITCH le 1er juin</strong></p>
+<h3>CHAMPIONNAT A 2027</h3>
+<ul>
+  <li><strong>1. Drossart J. 272 pts (2 eme A + 2 eme ETE)</strong></li>
+  <li><strong>2. Pitcher L. 213 pts (3 eme A + 4 eme ETE)</strong></li>
+  <li><strong>3. Canel M. 207 pts (4 eme A + 3 eme ETE)</strong></li>
+  <li><strong>4. Jouvel F. 200 pts(1er A)</strong></li>
+  <li><strong>5. Minet J. 164 pts (7 eme C + 1er ETE)</strong></li>
+  <li><strong>6. Vanneste D. 145 pts (1er B + 19 eme ETE)</strong></li>
+  <li><strong>7. Trenteseaux M. 129 pts (2 eme B + 14 eme ETE)</strong></li>
+  <li><strong>8. Skowron JP. 127 pts (7 eme A + 9 eme ETE)</strong></li>
+</ul>
+<h3>CHAMPIONNAT B 2027</h3>
+<ul>
+  <li><strong>9. Coens T. 118 pts (2 eme C + 5 eme ETE)</strong></li>
+  <li><strong>10. Hardenne E. 117 pts (3 eme B + 12 eme ETE)</strong></li>
+  <li><strong>11. Selimov R. 100 pts (5 eme A)</strong></li>
+  <li><strong>12. Taquet G. 100 pts (8 eme A + 18 eme ETE)</strong></li>
+  <li><strong>13. Bargibant D. 98 pts (5 eme B + 10 eme ETE)</strong></li>
+  <li><strong>14. Chajia G. 95 pts (1er C + 13 eme ETE)</strong></li>
+  <li><strong>15. Menet K. 89 pts (6 eme A)</strong></li>
+  <li><strong>16. Renault L. 84 pts (8 eme B + 11 eme ETE)</strong></li>
+  </ul>
+  <h3>Open Hivernale | Championnat C 2027</h3>
+  <ul>
+  <li><strong>17. Ronsyn A. 81 pts (5 eme C + 8 eme ETE)</strong></li>
+  <li><strong>18. Penninckx L. 79 pts (11 eme C + 6 eme ETE)</strong></li>
+  <li><strong>19. Tkindt V. 74 pts (10 eme C + 7 eme ETE)</strong></li>
+  <li><strong>20. Tounkara P. 71 pts(3 eme C + 15 eme ETE)</strong></li>
+  <li><strong>21. Lienart L. 69 pts (4 eme B)</strong></li>
+  <li><strong>22. Marcy M. 63 pts (4 eme C + 16 eme ETE)</strong></li>
+  <li><strong>23. Barcak G. 53 pts (6 eme B)</strong></li>
+  <li><strong>24. Huys V. 50 pts (8 eme C + 17 eme ETE)</strong></li>
+  <li><strong>25. Quenoy V. 38 pts (7 eme B)</strong></li>
+  <li><strong>26. Delsalle D. 37 pts (14 eme C + 21 eme ETE)</strong></li>
+  <li><strong>27. Perin V. 36 pts (17 eme C + 20 eme ETE)</strong></li>
+  <li><strong>28. Blanc A. 27 pts (6 eme C)</strong></li>
+  <li><strong>29. Paul J. 20 pts (9 eme C)</strong></li>
+  <li><strong>30. Dewatripont A. 16 pts (12 eme C)</strong></li>
+  <li><strong>31. Crepin A. 15 pts (13 eme C)</strong></li>
+  <li><strong>32. Agache B. 13 pts (15 eme C)</strong></li>
+</ul>
+</div>
+</div>
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>5</span>
+  </div>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page page-7" id="page6">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="content">
+    <div>
+   <h2>Les épreuves du Zodiaque</h2>
+
+<p>La 5e édition des épreuves du Zodiaque a eu lieu le vendredi 22 mai, avec 15 membres présents pour y participer.</p>
+
+<p>L’épreuve du Taureau consistait en une partie d’échecs en 3+ (Chess).</p>
+
+<p>Son but est d’infliger 3 échecs à son adversaire dans une cadence de blitz 4+3 pour remporter la partie.</p>
+
+<p>La soirée s’est terminée avec Julien, qui a réalisé un parfait 8/8 pour prendre les 24 points et s’emparer confortablement de la tête du tournoi.</p>
+
+<p><strong>N’hésitez pas à venir vous amuser au club et à jouer aux échecs avec des variantes uniques du jeu !</strong></p>
+
+<p>PROCHAINE ÉDITION : L’épreuve des Gémeaux (Blitz main-tête (2v2))</p>
+    </div>
+  </div>
+<div style="display:flex; justify-content:space-between; align-items:center; gap:20px; margin-top: 30px;">
+    <div style="flex:1; text-align:center;">
+      <img src="C:\Users\Liam\OneDrive\Images\Screenshots\Screenshot 2026-06-02 162321.png"
+           style="width:100%; max-width:700px; height:400px; border-radius:4px;">
+    </div>
+  </div>
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>6</span>
+  </div>
+</div>
+
+<!-- PAGE 7 -->
+<div class="page" id="page7">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="subtitle">
+        <h1>Open d'été + règlement</h1>
+   </div>     
+     
+  <hr> 
+          
+     <div class="content">  
+     <div>
+<p><strong>Voici le règlement de l’Open d’été :</strong></p>
+
+<p><strong>1. Lois du jeu :</strong><br>
+Les parties sont régies par les lois du jeu de la FIDE :</p>
+
+<p>
+Chaque joueur joue à tour de rôle.<br>
+Si un joueur touche une pièce, il doit la jouer (règle « pièce touchée = pièce jouée »).<br>
+Une partie peut se terminer par :
+<ul>
+  <li>échec et mat</li>
+  <li>abandon</li>
+  <li>nulle (pat, répétition, règle des 50 coups, accord mutuel, etc.)</li>
+</ul>
+Les coups illégaux sont sanctionnés (ajout de temps à l’adversaire, voire perte de la partie après répétition).
+</p>
+
+<p><strong>2. Les retards :</strong><br>
+Le temps de tolérance est fixé à 30 minutes après le début de la ronde. Passé ce délai, tout joueur non présent sera déclaré forfait, sauf décision contraire de l’arbitre.</p>
+
+<p><strong>3. Horaires et présence :</strong><br>
+Les joueurs doivent se signaler comme présents avant 20h20 pour être inclus dans les appariements.</p>
+
+<p>
+Les appariements sont effectués immédiatement après cette heure. Tout joueur non signalé comme présent à 20h20 ne sera pas apparié pour la ronde, sauf décision de l’arbitre.</p>
+
+<p>Les parties sont lancées à 20h30.</p>
+
+<p><strong>4. Notation des coups :</strong><br>
+Obligatoire en parties classiques. Les joueurs doivent noter chaque coup joué.</p>
+
+<p><strong>5. Arbitrage :</strong><br>
+Un arbitre officiel supervise la compétition (Julien), ou un assistant de l’arbitre (Liam). Il applique les règles et prend les décisions en cas de litige.</p>
+
+
+<p><strong>6. Système de tournoi :</strong><br>
+Système suisse : tous les joueurs jouent plusieurs rondes contre des adversaires de niveau similaire.</p>
+
+<p>Classement basé sur :
+<ul>
+  <li>points (3 victoire, 2 nulle, 1 défaite)</li>
+  <li>départages (Buchholz, Sonneborn-Berger, etc.)</li>
+</ul>
+</p>
+</div>
+<div>
+<p><strong>7. Règles de comportement :</strong><br>
+Interdiction d’utiliser un téléphone ou tout appareil électronique.<br>
+Respect du silence et des autres joueurs.<br>
+Toute aide extérieure est strictement interdite (triche = exclusion).<br>
+À l’issue de votre partie, les joueurs sont priés de ranger l’échiquier dans la salle d’analyse.</p>
+
+<p><strong>8. Conditions de jeu :</strong><br>
+Les joueurs doivent évoluer dans un environnement calme.<br>
+Il est interdit d’analyser une partie en cours dans la salle de jeu.<br>
+Les spectateurs doivent rester discrets.</p>
+
+<p><strong>9. Homologation FIDE :</strong></p>
+
+<p>Pour qu’un tournoi soit officiel FIDE :</p>
+
+<ul>
+  <li>arbitre agréé FIDE</li>
+  <li>cadence conforme</li>
+  <li>enregistrement du tournoi</li>
+  <li>respect des règles internationales</li>
+</ul>
+
+<p><strong>Tout joueur souhaitant participer à une compétition FIDE doit être affilié à un club reconnu par sa fédération nationale et être en ordre de cotisation au moment de l’inscription.</strong></p>
+<p>
+Voici les points PITCH selon les positions finales de la competition et le classement apres la R2 de l'Open :
+</p>
+<ul>
+<li>1. Minet Julien 140 pts </li>
+<li>2. Drossart Jonathan 112 pts</li>
+<li>3. Canel Michel 93 pts</li>
+<li>4. Pitcher Liam 80 pts</li>
+<li>5. Coens Theo 70 pts</li>
+<li>6. Penninckx Lucas 62 pts</li>
+<li>7. Tkindt Victor 56 pts</li>
+<li>8. Ronsyn Arthur 51 pts</li>
+<li>9. Skowron Jean-Pol 47 pts</li>
+<li>10. Bargibant Damien 43 pts</li>
+<li>11. Renault Luka 40 pts</li>
+<li>12. Hardenne Esteban 37 pts</li>
+<li>13. Chajia Govan 35 pts</li>
+<li>14. Trenteseaux Malo 33 pts</li>
+<li>15. Tounkara Paul 31 pts</li>
+<li>16. Marcy Maxime 29 pts</li>
+<li>etc...</li>
+</ul>
+<p><strong>⚠️Seuls les 7 premiers résultats sur les 9 dates disponibles sont pris en compte pour le classement.</strong></p>
+</div>
+</div>
+  </div>
+</div>
+
+
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>7</span>
+  </div>
+</div>
+
+<!-- PAGE 8 -->
+<div class="page page-7" id="page8">
+  <div class="title">
+    <h1>♟️ Newsletter de l'Échiquier Tournaisien</h1>
+    <p>Mai 2026</p>
+  </div>
+
+  <hr>
+
+  <div class="content">
+    <div>
+      <h2>Site Internet du club</h2>
+      <p>Le site internet d'Enguerran est arrivé à son terme le 12 avril 2026, 
+        après de nombreuses années de service. Mais ce n'est pas la fin, car une 
+        nouveauté sera bientôt disponible pour tous les membres !
+      </p>
+     <p>Le prochain site internet du club cree par Florian sera disponible tres prochainement pour tous donc pas de panique sur ce sujet. 
+      En attendant je vais vous partagez ici le calendrier</p>
+    </div>
+    <div>
+      <h2>Calendrier du club</h2>
+      <p>N'hésitez pas à prendre une photo du calendrier afin de ne pas l'oublier.</p>
+      <ul>
+        <Li>05/06 -> Open d'Été : Ronde 3 </Li>
+        <Li>12/06 -> Zodiaque : blitz gémeaux (main-tête)</Li>
+        <Li>19/06 -> Open d'Été : Ronde 4</Li>
+        <Li>26/06 -> Open d'Été : Ronde 5</Li>
+        <Li>03/07 -> Zodiaque : blitz cancer (blitz à 4)</Li>
+        <Li>10/07 -> "CLUB FERME (Grandes Vacances)"</Li>
+        <Li>17/07 -> "CLUB FERME (Grandes Vacances)"</Li>
+        <Li>24/07 -> Open d'Été : Ronde 6</Li>
+        <Li>31/07 -> Open d'Été : Ronde 7</Li>
+        <Li>07/08 -> Zodiaque : Bitz lion (Checkless)</Li>
+        <Li>14/08 -> Open d'Été : Ronde 8</Li>
+        <Li>21/08 -> Open d'Été : Ronde 9</Li>
+        <Li>28/08 -> BLITZ CHERCQ</Li>
+      </ul>
+      <p><strong>Au plaisir de vous voir au club nombreux !</strong></p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>écrit par Liam P.</span>
+    <span>8</span>
+  </div>
+</div>
+
+
+<script>
+  function showPage(pageNumber) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+    document.getElementById('page' + pageNumber).classList.add('active');
+    document.querySelectorAll('.nav-btn')[pageNumber - 1].classList.add('active');
+  }
+  function checkPassword() {
+  const pass = document.getElementById("password").value;
+
+  if (pass === "Mai") {
+    document.getElementById("login-screen").style.display = "none";
+    startLoading();
+  } else {
+    document.getElementById("error").innerText = "Mot de passe incorrect";
+  }
+}
+
+function startLoading() {
+  const loading = document.getElementById("loading-screen");
+  const progress = document.getElementById("progress");
+
+  loading.style.display = "flex";
+
+  let width = 0;
+  let interval = setInterval(() => {
+    width += 1.5;
+    progress.style.width = width + "%";
+
+    if (width >= 100) {
+      clearInterval(interval);
+      loading.style.display = "none";
+    }
+  }, 30);
+}
+</script>
+
+</body>
+</html>
